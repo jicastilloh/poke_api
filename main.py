@@ -18,8 +18,8 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    # query = "select * from pokequeue.MESSAGES"
-    query = "select 1"
+    query = "select * from pokequeue.MESSAGES"
+    # query = "select 1"
     result = await execute_query_json(query)
     result_dict = json.loads(result)
     return result_dict

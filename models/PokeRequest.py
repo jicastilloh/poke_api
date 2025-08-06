@@ -1,12 +1,12 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
-class PokemonRequest(BaseModel):
 
+class PokemonRequest(BaseModel):
     id: Optional[int] = Field(
         default=None,
         ge=1,
-        description="ID de la peticion"
+        description="ID de la petición"
     )
 
     pokemon_type: Optional[str] = Field(
@@ -15,14 +15,14 @@ class PokemonRequest(BaseModel):
         pattern="^[a-zA-Z0-9_]+$"
     )
 
-    url : Optional[str] = Field(
+    url: Optional[str] = Field(
         default=None,
-        description="URL de la peticion",
+        description="Url de la petición",
         pattern="^https?://[^\s]+$"
     )
 
     status: Optional[str] = Field(
         default=None,
-        description="Estado de la peticion",
-        pattern="^(sent|completed|failed|inprogress)$"
+        description="Estado de la pteición",
+        pattern="^(sent|completed|failed|inprogress)"
     )

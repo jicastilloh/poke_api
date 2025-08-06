@@ -13,6 +13,18 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+async def insert_pokemon_request(pokemon_request: PokemonRequest) -> dict:
+    try:
+        query = "exec pokequeue.create_poke_request ?"
+        params = (pokemon_request.pokemon_type, )
+        result = await execute_query_json(query, params, needs_commit=True)
+        result_dict = json.loads(result)
+        return result_dict
+    except Exception as e:
+        logger.error(f"Error inserting report request {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
 async def select_pokemon_request(id: int):
     try:
         query = "select * from pokequeue.requests where id = ?"
@@ -58,16 +70,16 @@ async def insert_pokemon_request(pokemon_request: PokemonRequest) -> dict:
 
 async def get_all_request() -> dict:
     query = """
-        select 
+        select
             r.id as ReportId
             , s.description as Status
             , r.type as PokemonType
-            , r.url 
-            , r.created 
+            , r.url
+            , r.created
             , r.updated
-        from pokequeue.requests r 
-        inner join pokequeue.status s 
-        on r.id_status = s.id 
+        from pokequeue.requests r
+        inner join pokequeue.status s
+        on r.id_status = s.id
     """
     result = await execute_query_json(query)
     result_dict = json.loads(result)
