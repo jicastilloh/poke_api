@@ -23,6 +23,12 @@ class PokemonRequest(BaseModel):
 
     status: Optional[str] = Field(
         default=None,
-        description="Estado de la pteición",
+        description="Estado de la petición",
         pattern="^(sent|completed|failed|inprogress)"
+    )
+
+    sample_size: Optional[int] = Field(
+        default=None,
+        description="Cantidad de registros del reporte",
+        gt=0
     )

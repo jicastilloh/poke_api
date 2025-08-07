@@ -8,10 +8,13 @@ load_dotenv()
 AZURE_STORAGE_CONNECTION_STRING = os.getenv("AZURE_SAK")
 AZURE_STORAGE_CONTAINER = os.getenv("AZURE_STORAGE_CONTAINER")
 
+
 class ABlob:
     def __init__(self):
-        self.blob_service_client = BlobServiceClient.from_connection_string(AZURE_STORAGE_CONNECTION_STRING)
-        self.container_client = self.blob_service_client.get_container_client(AZURE_STORAGE_CONTAINER)
+        self.blob_service_client = BlobServiceClient.from_connection_string(
+            AZURE_STORAGE_CONNECTION_STRING)
+        self.container_client = self.blob_service_client.get_container_client(
+            AZURE_STORAGE_CONTAINER)
 
     def generate_sas(self, id: int):
         blob_name = f"poke_report_{id}.csv"
@@ -24,3 +27,9 @@ class ABlob:
             expiry=datetime.utcnow() + timedelta(hours=1)
         )
         return sas_token
+
+    def delete_blob(self, id: int):
+        blob_name = f"poke_report_{id}.csv"
+        blob_client = self.blob_service_client.get_blob_client(
+            container=AZURE_STORAGE_CONTAINER, blob=blob_name)
+        blob_client.delete_blob()
